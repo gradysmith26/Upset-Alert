@@ -9,5 +9,12 @@ public class Main {
         System.out.println("Game 2: " + game2.isUpset());
         System.out.println("Game 3: " + game3.isUpset());
         System.out.println("Game 4: " + game4.isUpset());
+
+        try {
+            String json = ScoreboardClient.fetchScoreboard();
+            System.out.println("Successfully fetched " + json.length() + " characters of basketball data.");
+        } catch (Exception e) {
+            System.out.println("Error fetching scoreboard: " + e.getMessage());
+        }
     }
 }
