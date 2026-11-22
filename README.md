@@ -1,5 +1,4 @@
 # Upset-Alert
-Project Goal:
 Upset Alert is a college basketball notification system that automatically detects when an AP Top 25 NCAA Men's basketball team loses to a lower ranked or unranked opponent.
 The goal is to help college basketball fans stay informed about upsets without having to check scores every day. I hope to eventually send push notifications to multiple users.
 
