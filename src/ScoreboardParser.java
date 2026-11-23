@@ -1,12 +1,26 @@
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.HashSet;
+import java.util.Set;
+
 public class ScoreboardParser {
 
     public static void printGames(String json) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(json);
         JsonNode events = root.path("events");
-        int count = 0;
+
+        Path file = Path.of("data/reported-games.txt");
+
+        Set<String> reportedGames = new HashSet<>();
+
+        if (Files.exists(file)) {
+            reportedGames.addAll(Files.readAllLines(file));
+        }
+
         for (JsonNode event : events) {
             JsonNode competitors = event.path("competitions").path(0).path("competitors");
             if (competitors.size() < 2) {
@@ -40,22 +54,15 @@ public class ScoreboardParser {
             }
 
             Game game = new Game(name1, name2, points1, points2, rank1, rank2, isFinal);
-            if (game.isUpset()) {
+            if (game.isUpset() && !reportedGames.contains(gameId)) {
                 System.out.println("UPSET DETECTED!");
                 System.out.println(name1 + " " + points1 + " - " + name2 + " " + points2);
+                System.out.println("ID: " + gameId);
+                Files.writeString(
+                    file, gameId + System.lineSeparator(), StandardOpenOption.CREATE, StandardOpenOption.APPEND
+                    );
+                reportedGames.add(gameId);
             }
-
-            System.out.println(
-                "Game ID: " + gameId + " | " + name1 + " (#" + rank1 + ") " + points1
-                + " - " + name2 + " (#" + rank2 + ") " + points2 + " | Final: " + isFinal
-            );
-
-            count++;
-
-            if (count == 5) {
-                break;
-            }
-
         }
     }
 }
