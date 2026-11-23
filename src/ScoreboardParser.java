@@ -14,16 +14,48 @@ public class ScoreboardParser {
             }
             JsonNode team1 = competitors.get(0);
             JsonNode team2 = competitors.get(1);
+
+            String gameId = event.path("id").asText();
+
+            int rank1 = team1.path("curatedRank").path("current").asInt(-1);
+            int rank2 = team2.path("curatedRank").path("current").asInt(-1);
+
+            if (rank1 == 99) {
+                rank1 = 0;
+            }
+            if (rank2 == 99) {
+                rank2 = 0;
+            }
+
             String name1 = team1.path("team").path("displayName").asText();
             String name2 = team2.path("team").path("displayName").asText();
-            String score1 = team1.path("score").asText("N/A");
-            String score2 = team2.path("score").asText("N/A");
+
             boolean isFinal = event.path("status").path("type").path("completed").asBoolean();
-            System.out.println(name1 + " " + score1 + " - " + name2 + " " + score2 + " | Final: " + isFinal);
+            
+            int points1 = team1.path("score").asInt(-1);
+            int points2 = team2.path("score").asInt(-1);
+
+            if (!isFinal || points1 < 0 || points2 < 0 || rank1 == -1 || rank2 == -1) {
+                continue;
+            }
+
+            Game game = new Game(name1, name2, points1, points2, rank1, rank2, isFinal);
+            if (game.isUpset()) {
+                System.out.println("UPSET DETECTED!");
+                System.out.println(name1 + " " + points1 + " - " + name2 + " " + points2);
+            }
+
+            System.out.println(
+                "Game ID: " + gameId + " | " + name1 + " (#" + rank1 + ") " + points1
+                + " - " + name2 + " (#" + rank2 + ") " + points2 + " | Final: " + isFinal
+            );
+
             count++;
+
             if (count == 5) {
                 break;
             }
+
         }
     }
 }
