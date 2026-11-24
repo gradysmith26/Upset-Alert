@@ -55,13 +55,45 @@ public class ScoreboardParser {
 
             Game game = new Game(name1, name2, points1, points2, rank1, rank2, isFinal);
             if (game.isUpset() && !reportedGames.contains(gameId)) {
-                System.out.println("UPSET DETECTED!");
-                System.out.println(name1 + " " + points1 + " - " + name2 + " " + points2);
-                System.out.println("ID: " + gameId);
+
+                String winner;
+                String loser;
+                int winningScore;
+                int losingScore;
+                String winningRank;
+                String losingRank;
+
+                if (points1 > points2) {
+                    winner = name1;
+                    loser = name2;
+                    winningScore = points1;
+                    losingScore = points2;
+                    if (rank1 == 0) {
+                        winningRank = "Unranked";
+                    } else {
+                        winningRank = "#" + rank1;
+                    }
+                    losingRank = "#" + rank2;
+                } else {
+                    winner = name2;
+                    loser = name1;
+                    winningScore = points2;
+                    losingScore = points1;
+                    if (rank2 == 0) {
+                        winningRank = "Unranked";
+                    } else {
+                        winningRank = "#" + rank2;
+                    }
+                    losingRank = "#" + rank1;
+                }
+
+                String message = winningRank + " " + winner + " Defeat " + losingRank + " " + loser + " " + winningScore + "-" + losingScore;
+                NotificationSender.send(message);
                 Files.writeString(
                     file, gameId + System.lineSeparator(), StandardOpenOption.CREATE, StandardOpenOption.APPEND
                     );
                 reportedGames.add(gameId);
+                System.out.println("UPSET DETECTED: " + message);
             }
         }
     }
