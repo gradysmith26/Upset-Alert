@@ -23,5 +23,6 @@
 hs_err_pid*
 replay_pid*
 *.class
-data/scoreboard.jason
+data/scoreboard.json
+data/reported-games.txt
 target/
