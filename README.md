@@ -81,6 +81,6 @@ This application currently needs to be launched manually.
 
 # Demo
 
-[Watch the Upset Alert Demonstration][videolink]
+[Watch the Upset Alert Demonstration][https://youtu.be/fcylf4TSoxg]
 
 
