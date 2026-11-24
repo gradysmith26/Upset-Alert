@@ -39,19 +39,23 @@ Before you start, be sure you've installed:
 
 ### Example Input and Output
 No manual input is required.
+
 Example game data:
-Purdue (Unranked): 80
-Indiana (#3): 79
-Game Status: Final
+- Purdue (Unranked): 80
+- Indiana (#3): 79
+- Game Status: Final
 
 Output:
 Unranked Purdue Boilermakers defeat #3 Indiana Hoosiers 80-79
+
 After the upset is reported, the game ID is saved to prevent duplicate notifications.
 
 ### Step 4: Run Tests
 - "mvn clean test"
+
 This runs the JUnit tests for upset detection.
-This application currently needs to be launched manually
+
+This application currently needs to be launched manually.
 
 
 # Roadmap
